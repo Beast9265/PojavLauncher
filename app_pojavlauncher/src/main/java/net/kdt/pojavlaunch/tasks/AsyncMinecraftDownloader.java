@@ -52,9 +52,9 @@ public class AsyncMinecraftDownloader {
                       String realVersion, // this was there for a reason
                       @NonNull DoneListener listener) {
         sExecutorService.execute(() -> {
-            try {
-                downloadGame(activity, version, realVersion);
+            if(downloadGame(activity, version, realVersion))
                 listener.onDownloadDone();
+<<<<<<< HEAD
             }catch (DownloaderException e) {
                 listener.onDownloadFailed(e.getCause());
             }
@@ -62,6 +62,12 @@ public class AsyncMinecraftDownloader {
     }
     /* we do the throws DownloaderException thing to avoid blanket-catching Exception as a form of anti-lazy-developer protection */
     private void downloadGame(Activity activity, JMinecraftVersionList.Version verInfo, String versionName) throws DownloaderException {
+=======
+        });
+    }
+
+    private boolean downloadGame(@NonNull Activity activity, JMinecraftVersionList.Version verInfo, String versionName){
+>>>>>>> parent of 35c01793a (Better download handling)
         final String downVName = "/" + versionName + "/" + versionName;
 
         //Downloading libraries
@@ -91,9 +97,15 @@ public class AsyncMinecraftDownloader {
             verInfo = Tools.getVersionInfo(versionName);
 
             // THIS one function need the activity in the case of an error
+<<<<<<< HEAD
             if(activity != null && !JRE17Util.installNewJreIfNeeded(activity, verInfo)){
                 ProgressLayout.clearProgress(ProgressLayout.DOWNLOAD_MINECRAFT);
                 throw new DownloaderException();
+=======
+            if(!JRE17Util.installNewJreIfNeeded(activity, verInfo)){
+                ProgressKeeper.submitProgress(ProgressLayout.DOWNLOAD_MINECRAFT, -1, -1);
+                return false;
+>>>>>>> parent of 35c01793a (Better download handling)
             }
 
             try {
@@ -101,7 +113,10 @@ public class AsyncMinecraftDownloader {
                     assets = downloadIndex(verInfo, new File(Tools.ASSETS_PATH, "indexes/" + verInfo.assets + ".json"));
             } catch (IOException e) {
                 Log.e("AsyncMcDownloader", e.toString(), e);
+<<<<<<< HEAD
                 throw new DownloaderException(e);
+=======
+>>>>>>> parent of 35c01793a (Better download handling)
             }
 
             File outLib;
@@ -192,8 +207,11 @@ public class AsyncMinecraftDownloader {
             throw e;
         } catch (Throwable e) {
             Log.e("AsyncMcDownloader", e.toString(),e );
+<<<<<<< HEAD
             ProgressLayout.clearProgress(ProgressLayout.DOWNLOAD_MINECRAFT);
             throw new DownloaderException(e);
+=======
+>>>>>>> parent of 35c01793a (Better download handling)
         }
 
         ProgressLayout.setProgress(ProgressLayout.DOWNLOAD_MINECRAFT, 0, R.string.mcl_launch_cleancache);
@@ -211,10 +229,16 @@ public class AsyncMinecraftDownloader {
                 downloadAssets(assets, assets.mapToResources ? new File(Tools.OBSOLETE_RESOURCES_PATH) : new File(Tools.ASSETS_PATH));
         } catch (Exception e) {
             Log.e("AsyncMcDownloader", e.toString(), e);
+<<<<<<< HEAD
             ProgressLayout.clearProgress(ProgressLayout.DOWNLOAD_MINECRAFT);
             throw new DownloaderException(e);
         }
         ProgressLayout.clearProgress(ProgressLayout.DOWNLOAD_MINECRAFT);
+=======
+        }
+        ProgressKeeper.submitProgress(ProgressLayout.DOWNLOAD_MINECRAFT, -1, -1);
+        return true;
+>>>>>>> parent of 35c01793a (Better download handling)
     }
 
     public void verifyAndDownloadMainJar(String url, String sha1, File destination) throws Exception{
@@ -426,6 +450,7 @@ public class AsyncMinecraftDownloader {
 
     public interface DoneListener{
         void onDownloadDone();
+<<<<<<< HEAD
         void onDownloadFailed(Throwable throwable);
     }
 
@@ -434,5 +459,7 @@ public class AsyncMinecraftDownloader {
         public DownloaderException(Throwable e) {
             super(e);
         }
+=======
+>>>>>>> parent of 35c01793a (Better download handling)
     }
 }

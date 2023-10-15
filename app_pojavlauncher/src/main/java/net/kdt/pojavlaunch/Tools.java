@@ -528,19 +528,12 @@ public final class Tools {
         }
     }
 
-    public static String printToString(Throwable throwable) {
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(stringWriter);
-        throwable.printStackTrace(printWriter);
-        printWriter.close();
-        return stringWriter.toString();
-    }
-
     public static void showError(Context ctx, Throwable e) {
         showError(ctx, e, false);
     }
 
     public static void showError(final Context ctx, final Throwable e, final boolean exitIfOk) {
+<<<<<<< HEAD
         showError(ctx, R.string.global_error, null ,e, exitIfOk, false);
     }
     public static void showError(final Context ctx, final int rolledMessage, final Throwable e) {
@@ -548,11 +541,15 @@ public final class Tools {
     }
     public static void showError(final Context ctx, final String rolledMessage, final Throwable e) {
         showError(ctx, R.string.global_error, rolledMessage, e, false, false);
+=======
+        showError(ctx, R.string.global_error, e, exitIfOk, false);
+>>>>>>> parent of 35c01793a (Better download handling)
     }
     public static void showError(final Context ctx, final String rolledMessage, final Throwable e, boolean exitIfOk) {
         showError(ctx, R.string.global_error, rolledMessage, e, exitIfOk, false);
     }
     public static void showError(final Context ctx, final int titleId, final Throwable e, final boolean exitIfOk) {
+<<<<<<< HEAD
         showError(ctx, titleId, null, e, exitIfOk, false);
     }
 
@@ -566,6 +563,17 @@ public final class Tools {
         Runnable runnable = () -> {
             final String errMsg = showMore ? printToString(e) : rolledMessage != null ? rolledMessage : e.getMessage();
             AlertDialog.Builder builder = new AlertDialog.Builder(ctx)
+=======
+        showError(ctx, titleId, e, exitIfOk, false);
+    }
+
+    private static void showError(final Context ctx, final int titleId, final Throwable e, final boolean exitIfOk, final boolean showMore) {
+        e.printStackTrace();
+
+        Runnable runnable = () -> {
+            final String errMsg = showMore ? Log.getStackTraceString(e): e.getMessage();
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) ctx)
+>>>>>>> parent of 35c01793a (Better download handling)
                     .setTitle(titleId)
                     .setMessage(errMsg)
                     .setPositiveButton(android.R.string.ok, (p1, p2) -> {
@@ -577,8 +585,13 @@ public final class Tools {
                             }
                         }
                     })
+<<<<<<< HEAD
                     .setNegativeButton(showMore ? R.string.error_show_less : R.string.error_show_more, (p1, p2) -> showError(ctx, titleId, rolledMessage, e, exitIfOk, !showMore))
                     .setNeutralButton(android.R.string.copy, (p1, p2) -> {
+=======
+                    .setNegativeButton(showMore ? R.string.error_show_less : R.string.error_show_more, (DialogInterface.OnClickListener) (p1, p2) -> showError(ctx, titleId, e, exitIfOk, !showMore))
+                    .setNeutralButton(android.R.string.copy, (DialogInterface.OnClickListener) (p1, p2) -> {
+>>>>>>> parent of 35c01793a (Better download handling)
                         ClipboardManager mgr = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
                         mgr.setPrimaryClip(ClipData.newPlainText("error", Log.getStackTraceString(e)));
                         if(exitIfOk) {

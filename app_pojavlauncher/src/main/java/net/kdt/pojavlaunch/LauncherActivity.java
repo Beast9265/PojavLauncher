@@ -125,12 +125,27 @@ public class LauncherActivity extends BaseActivity {
         }
         String normalizedVersionId = AsyncMinecraftDownloader.normalizeVersionId(prof.lastVersionId);
         JMinecraftVersionList.Version mcVersion = AsyncMinecraftDownloader.getListedVersion(normalizedVersionId);
+<<<<<<< HEAD
         new AsyncMinecraftDownloader().start(
                 this,
                 mcVersion,
                 normalizedVersionId,
                 new ContextAwareDoneListener(this, normalizedVersionId)
         );
+=======
+        new AsyncMinecraftDownloader(this, mcVersion, normalizedVersionId, () -> ProgressKeeper.waitUntilDone(()-> runOnUiThread(() -> {
+            try {
+                Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
+                mainIntent.putExtra(INTENT_MINECRAFT_VERSION, normalizedVersionId);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(mainIntent);
+                finish();
+                android.os.Process.killProcess(android.os.Process.myPid()); //You should kill yourself, NOW!
+            } catch (Throwable e) {
+                Tools.showError(getBaseContext(), e);
+            }
+        })));
+>>>>>>> parent of 35c01793a (Better download handling)
         return false;
     };
 
